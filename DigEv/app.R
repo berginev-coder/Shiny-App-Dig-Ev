@@ -18,40 +18,36 @@ dig <- read.csv("DIG.csv")
 # Define UI for application that draws a histogram
 ui <- navbarPage("DIG Trial Shiny Application",
 
-    # Application title
-    titlePanel("Old Faithful Geyser Data"),
-
-    # Sidebar with a slider input for number of bins 
-    sidebarLayout(
-        sidebarPanel(
-            sliderInput("bins",
-                        "Number of bins:",
-                        min = 1,
-                        max = 50,
-                        value = 30)
-        ),
-
-        # Show a plot of the generated distribution
-        mainPanel(
-           plotOutput("distPlot")
-        )
+    tabPanel("About the Dig Trial",
+             fluidPage(
+               h2("About the Dig Trial Introduction"), 
+                  p("This Trial Explores the DIG or Digoxin Trial Dataset"),
+                    p("Use the tabs above to:"),
+               tags$li("Explore distributions of individual variables"),
+               tags$li("Inversigate the relationships between the variables with interactive points"),
+               tags$li("Filter by baseline characteristics")
+               )
+             ),
+    tabPanel("scatterplot",
+             fluidPage(h2("AGE vs HR scatterplot"),
+                       plotOutput("scatterplot")
+                       )
+             )
     )
-)
+                    
 
-# Define server logic required to draw a histogram
-server <- function(input, output) {
 
-    output$distPlot <- renderPlot({
-        # generate bins based on input$bins from ui.R
-        x    <- faithful[, 2]
-        bins <- seq(min(x), max(x), length.out = input$bins + 1)
+server <- function(input,output,session) {output$scatterplot <- renderPlot({
+ ggplot(dig, aes(x = AGE, y = HR)) + 
+    geom_point(alpha = 0.5) +
+    geom_smooth(method = "loess") +
+    labs(
+      title = "AGE vs HR",
+      x = "AGE",
+      y = "HR") +
+    theme_light})
 
-        # draw the histogram with the specified number of bins
-        hist(x, breaks = bins, col = 'darkgray', border = 'white',
-             xlab = 'Waiting time to next eruption (in mins)',
-             main = 'Histogram of waiting times')
-    })
 }
 
 # Run the application 
-shinyApp(ui = ui, server = server)
+shinyApp(ui = ui,server = server)
