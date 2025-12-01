@@ -7,10 +7,16 @@
 #    https://shiny.posit.co/
 #
 
+
+
 library(shiny)
+library(ggplot2)
+library(dplyr)
+
+dig <- read.csv("DIG.csv")
 
 # Define UI for application that draws a histogram
-ui <- fluidPage(
+ui <- navbarPage("DIG Trial Shiny Application",
 
     # Application title
     titlePanel("Old Faithful Geyser Data"),
