@@ -45,7 +45,7 @@ server <- function(input,output,session) {output$scatterplot <- renderPlot({
       title = "AGE vs HR",
       x = "AGE",
       y = "HR") +
-    theme_light})
+    theme_light()})
 
 }
 
