@@ -24,10 +24,10 @@ ui <- navbarPage("DIG Trial Shiny Application",
                h2("About the Dig Trial Introduction"), 
                   p("This Trial Explores the DIG or Digoxin Trial Dataset"),
                     p("Use the tabs above to:"),
-              tags$ul(tags$li("Explore distributions of individual variables"),
+              tags$li("Explore distributions of individual variables"),
                tags$li("Investigate the relationships between the variables with interactive points"),
                tags$li("Filter by baseline characteristics")
-               ))
+               )
              ),
     tabPanel("scatterplot",
              fluidPage(h2("AGE vs HR scatterplot"),
@@ -40,13 +40,13 @@ ui <- navbarPage("DIG Trial Shiny Application",
 
 server <- function(input,output,session) {output$scatterplot <- renderPlot({
   dig <- read.csv("DIG.csv")
- ggplot(dig, aes(x = AGE, y = HR)) + 
+ ggplot(dig, aes(x = dig$AGE, y = dig$HR)) + 
     geom_point(alpha = 0.5) +
     geom_smooth(method = "loess") +
     labs(
       title = "AGE vs HR",
-      x = "AGE",
-      y = "HR") +
+      x = dig$AGE,
+      y = dig$HR) +
     theme_light()})
 }
 
