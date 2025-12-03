@@ -30,11 +30,15 @@ ui <- navbarPage("DIG Trial Shiny Application",
                           tags$li("Abbreviations and units of measurement for each variable was taken by the DIG code book"),
                           tags$li("Variables of Significance includes AGE SEX, BMI etc.")
                           
-                 )
-                 ,
-                 tabPanel("Age vs Treatment",
+                 ),
+                 
+                 
+                 
+                          
+                          
+                 tabPanel("Sex vs Treatment",
                           fluidPage(
-                            h2("AGE vs TRTMT scatterplot"),
+                            h2("SEX vs TRTMT Bar Chart"),
                             plotOutput("Result")
                           )
                  ))
@@ -42,18 +46,17 @@ ui <- navbarPage("DIG Trial Shiny Application",
 
     
    
-    server <- function(input,output,session) {
+    server <- function(input, output, session) {
       output$Result <- renderPlot({
-        
-        dig <- read.csv("DIG.csv")
-        ggplot(dig.df, aes(x = factor(TRTMT), y = AGE, fill = factor(TRTMT))) +
-          geom_boxplot() +
-          labs(title = "Boxplot of AGE by Treatment",
-               x = "Treatment", y = "Age") +
-          theme_minimal() +
-          scale_fill_manual(values = c("orange2", "pink4"))}
-    
-    )}
+      
+          ggplot(dig, aes(x = factor(TRTMT), fill = SEX)) +
+          geom_bar(position = "dodge", width = 0.5) +
+          labs(title = "Distribution of SEX by Treatment",
+           x = "Treatment", y = "Count") +
+          theme_light() +
+          scale_fill_manual(values = c("goldenrod3", "grey4","steelblue", "firebrick"))
+  })
+}
     
 
 
