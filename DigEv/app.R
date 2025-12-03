@@ -39,55 +39,47 @@ ui <- navbarPage("DIG Trial Shiny Application",
                           tags$li("Variables of Significance includes AGE SEX, BMI etc.")
                           
                  ),
-                 
+                
+                  tabPanel("Age vs Treatment",
+                          fluidPage(
+                            h2("Placebo vs Treatment distributed by Sex"),
+                            plotOutput("Result_Age"),
+                            h2("Notes on Age related to this trial"),
+                            tags$li("There were significantly more males recruited to this trial then females"),
+                            tags$li("Box Stratification would be useful in evening out the SEX distriubtion for more accurate results")
+                            
+                          )),
                  
                           
                           
                  tabPanel("Sex vs Treatment",
                           fluidPage(
-                            h2("SEX vs TRTMT Bar Chart"),
-                            plotOutput("Result"),
+                            h2("Placebo vs Treatment distributed by Sex"),
+                            plotOutput("Result_Sex"),
                             h2("Notes on Sex related to this trial"),
-                            tags$li("Note there were significantly more males recruited to this trial then females"),
-                            tags$li("This could")
+                            tags$li("There were significantly more males recruited to this trial then females"),
+                            tags$li("Box Stratification would be useful in evening out the SEX distriubtion for more accurate results")
+                            
                           )
-                 ),
+                 ))
                  
-                 tabPanel(
-                   "Single variable",
-                   sidebarLayout(
-                     sidebarPanel(
-                       selectInput(
-                         "single_var",
-                         "Choose a numeric variable:",
-                         choices = numeric_vars,
-                         selected = numeric_vars[1]
-                       ),
-                       sliderInput(
-                         "bins",
-                         "Number of bins:",
-                         min = 10,
-                         max = 80,
-                         value = 30
-                       ),
-                       checkboxInput("log_y", "Log-scale y-axis", FALSE)
-                     ),
-                     mainPanel(
-                       h3(textOutput("single_title")),
-                       plotOutput("single_hist"),
-                       h4("Summary statistics"),
-                       tableOutput("single_summary")
-                     )
-                   )
-                 )
-
+              
 
 
     
    
     server <- function(input, output, session) {
-      output$Result <- renderPlot({
+      output$Result_Age<- renderPlot({
       
+        
+        ggplot(dig, aes(x = factor(TRTMT), y = AGE, fill = factor(TRTMT))) +
+          geom_boxplot(width = 0.6) +
+          labs(title = "Age Distribution by Treatment Group",
+               x = "Treatment", y = "Age") +
+          scale_fill_manual(values = c("skyblue", "tomato")) +
+          theme_light() })
+      
+        output$Result_Sex <- renderPlot({
         dig$SEX <- factor(dig$SEX,
                           levels = c(1,2),
                           labels = c("Male", "Female"))
@@ -100,6 +92,7 @@ ui <- navbarPage("DIG Trial Shiny Application",
           scale_fill_manual(values = c("goldenrod3", "grey4"))
   })
     }
+    
   
     
   
