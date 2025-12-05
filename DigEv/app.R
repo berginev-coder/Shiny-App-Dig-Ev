@@ -28,7 +28,7 @@ ui <- navbarPage("DIG Trial Shiny Application",
                           fluidPage(
                             h2("About the Dig Trial Introduction"), 
                             p("The Digitalis Investigation Group Trial (DIG trial) was a landmark study testing digoxin in heart failure. It found that digoxin did not reduce overall mortality but did significantly lower hospitalizations for worsening heart failure"),
-                            p("This app will allow you to explore different variables attached to this trial and explore their relationships and significanct"),
+                            p("This app will allow you to explore different variables attached to this trial and explore their relationships and significance"),
                             p("Use the tabs above to:"),
                             tags$li("Explore distributions of individual variables"),
                             tags$li("Investigate the relationships between the variables with interactive points"),
@@ -45,8 +45,8 @@ ui <- navbarPage("DIG Trial Shiny Application",
                             h2("Placebo vs Treatment distributed by Sex"),
                             plotOutput("Result_Age"),
                             h2("Notes on Age related to this trial"),
-                            tags$li("There were significantly more males recruited to this trial then females"),
-                            tags$li("Box Stratification would be useful in evening out the SEX distriubtion for more accurate results")
+                            tags$li("Ages between the Placebo and Treatment groups were roughly the same with a slighly and not significantly higher average age in the  "),
+                            tags$li("")
                             
                           )),
                  
@@ -61,7 +61,18 @@ ui <- navbarPage("DIG Trial Shiny Application",
                             tags$li("Box Stratification would be useful in evening out the SEX distriubtion for more accurate results")
                             
                           )
-                 ))
+                 ),
+                 
+                 tabPanel("Mortality vs Treatment",
+                          fluidPage(
+                            h2("Mortality by Treatment Group"),
+                            plotOutput("Result_Death"),
+                            h2("Notes on Mortality related to this trial"),
+                            tags$li("This plot shows the proportion of patients who died in each treatment arm."),
+                            tags$li("The DIG trial found no significant difference in overall mortality between placebo and digoxin.")
+                          )
+                 )
+)
                  
               
 
@@ -76,7 +87,7 @@ ui <- navbarPage("DIG Trial Shiny Application",
           geom_boxplot(width = 0.6) +
           labs(title = "Age Distribution by Treatment Group",
                x = "Treatment", y = "Age") +
-          scale_fill_manual(values = c("skyblue", "tomato")) +
+          scale_fill_manual(values = c("skyblue", "red")) +
           theme_light() })
       
         output$Result_Sex <- renderPlot({
@@ -91,7 +102,23 @@ ui <- navbarPage("DIG Trial Shiny Application",
           theme_light() +
           scale_fill_manual(values = c("goldenrod3", "grey4"))
   })
-    }
+    
+    output$Result_Death <- renderPlot({
+      dig_plot <- dig
+      dig_plot$DEATH <- factor(dig_plot$DEATH,
+                               levels = c(0, 1),
+                               labels = c("Alive", "Dead"))
+      
+      ggplot(dig_plot, aes(x = factor(TRTMT), fill = DEATH)) +
+        geom_bar(position = "fill") +
+        labs(title = "Proportion of Mortality by Treatment Group",
+             x = "Treatment",
+             y = "Proportion",
+             fill = "Status") +
+        scale_y_continuous(labels = scales::percent_format()) +
+        theme_light()
+    })}
+    
     
   
     
