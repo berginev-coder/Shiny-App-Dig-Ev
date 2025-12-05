@@ -11,6 +11,7 @@ library(shiny)
 library(ggplot2)
 library(dplyr)
 library(readr)
+library(tableone)
 
 dig <- read.csv(file.path(getwd(), "DIG.csv"))
 
@@ -71,8 +72,17 @@ ui <- navbarPage("DIG Trial Shiny Application",
                             tags$li("This plot shows the proportion of patients who died in each treatment arm."),
                             tags$li("The DIG trial found no significant difference in overall mortality between placebo and digoxin.")
                           )
-                 )
-)
+                 ),
+                 tabPanel("Table of Baseline Characteristics",
+                          fluidPage(
+                            h2("Baseline Table of variables by Treatment Group"),
+                            tags$li("This Table summarizes baseline demographics and clinical characteristics stratified by treatment arm, Essentially Showing P-values for each."),
+                            tags$li("Look at the P value for ecah baseline factor and compare to see if was significant in the treatment group compared to the control"),
+                            tags$li("If the P-Value is <0.05 it is considered Significant in this Trial"),
+                            tableOutput("Table1")
+                          )
+                 ))
+
                  
               
 
@@ -117,7 +127,39 @@ ui <- navbarPage("DIG Trial Shiny Application",
              fill = "Status") +
         scale_y_continuous(labels = scales::percent_format()) +
         theme_light()
-    })}
+    })
+    output$Table1 <- renderTable({
+      
+      vars <- c("AGE", "SEX", "BMI", "KLEVEL", "CREAT", "DIABP", "SYSBP",
+                 "CVD", "WHF", "DIG", "HOSP", "HOSPDAYS")
+      
+      factorVars <- c("SEX", "HYPERTEN", "CVD", "WHF", "DIG")
+      
+      
+      
+      tab1 <- CreateTableOne(
+        vars       = vars,
+        strata     = "TRTMT",
+        data       = dig,
+        factorVars = factorVars,
+        includeNA  = TRUE
+      )
+      tab_mat <- print(tab1, printToggle = FALSE)
+      
+      df <- as.data.frame(tab_mat)
+      df <- cbind(Variable = rownames(df), df)
+      rownames(df) <- NULL
+      
+      print(df)
+      
+    })
+    }
+      
+      
+    
+    
+    
+
     
     
   
