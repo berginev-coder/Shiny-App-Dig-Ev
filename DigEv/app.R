@@ -181,17 +181,6 @@ ui <- navbarPage("DIG Trial Shiny Application",
     }
       
       
-    
-    
-    
 
-    
-    
-  
-    
-  
-
-
-# Run the application 
 shinyApp(ui = ui,server = server)
 
