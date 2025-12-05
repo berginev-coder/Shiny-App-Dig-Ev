@@ -33,7 +33,7 @@ ui <- navbarPage("DIG Trial Shiny Application",
                             p("Use the tabs above to:"),
                             tags$li("Explore distributions of individual variables"),
                             tags$li("Investigate the relationships between the variables with interactive points"),
-                            tags$li("Filter by baseline characteristics")
+                            tags$li("Investigate by means of P-value if each variable was significant or not.")
                           ),
                           h3("Notes on Data"),
                           tags$li("Abbreviations and units of measurement for each variable was taken by the DIG code book"),
@@ -47,7 +47,7 @@ ui <- navbarPage("DIG Trial Shiny Application",
                             plotOutput("Result_Age"),
                             h2("Notes on Age related to this trial"),
                             tags$li("Ages between the Placebo and Treatment groups were roughly the same with a slighly and not significantly higher average age in the  "),
-                            tags$li("")
+                            tags$li("The average age of patients in This trial were in their 60s")
                             
                           )),
                  
@@ -76,12 +76,37 @@ ui <- navbarPage("DIG Trial Shiny Application",
                  tabPanel("Table of Baseline Characteristics",
                           fluidPage(
                             h2("Baseline Table of variables by Treatment Group"),
-                            tags$li("This Table summarizes baseline demographics and clinical characteristics stratified by treatment arm, Essentially Showing P-values for each."),
+                            p("This Table summarizes baseline demographics and clinical characteristics stratified by treatment arm, Essentially Showing P-values for each."),
                             tags$li("Look at the P value for ecah baseline factor and compare to see if was significant in the treatment group compared to the control"),
                             tags$li("If the P-Value is <0.05 it is considered Significant in this Trial"),
                             tableOutput("Table1")
                           )
-                 ))
+                 ),
+                 
+                 
+                 tabPanel("Summary of the DIG Trial",
+                   
+                   fluidPage(h2("The Digitalis Investigation Group (DIG) Trial was a large, randomized study 
+       designed to assess whether digoxin improves outcomes in patients with chronic 
+       heart failure and reduced ejection fraction."),
+                   
+                   h3("Purpose"),
+                   p("To determine whether digoxin reduced overall mortality and hospitalizations 
+       for worsening heart failure compared with placebo."),
+                   
+                   h3("Key Findings"),
+                   tags$ul(
+                     tags$li("Digoxin did not reduce all-cause mortality."),
+                     tags$li("Digoxin significantly reduced hospitalizations due to worsening heart failure."),
+                     tags$li("Overall, digoxin improved symptoms but did not extend survival.")
+                   ),
+                   
+                   h3("Conclusion"),
+                   p("Digoxin remains useful for reducing heart failure symptoms and preventing hospital 
+       admissions, but it does not prolong life. Its role today is selective and often used 
+       when symptoms persist despite standard therapy.")
+                 )
+))
 
                  
               
